@@ -1,0 +1,360 @@
+--------------------+
+| Database           |
++--------------------+
+| d3                 |
+| d4                 |
+| db2                |
+| hospital           |
+| information_schema |
+| m2                 |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+9 rows in set (0.01 sec)
+
+mysql> use hospital;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++----------------------+
+| Tables_in_hospital   |
++----------------------+
+| Nurse                |
+| Patient              |
+| Physician            |
+| Physician_Speciality |
+| Ward                 |
++----------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from Physician;
++--------+-----------+-----------+----------------------+----------+--------+
+| Phy_ID | Phy_fname | phy_Lname | address              | salary   | Degree |
++--------+-----------+-----------+----------------------+----------+--------+
+|      1 | Rajesh    | Sreekumar | Kochi, Kerala        | 75000.00 | MD     |
+|      2 | Priya     | Nair      | Trivandrum, Kerala   | 60000.00 | MBBS   |
+|      3 | Suresh    | Pillai    | Kochi, Kerala        | 80000.00 | MD     |
+|      4 | Deepa     | Menon     | Calicut, Kerala      | 55000.00 | MBBS   |
+|      5 | Anil      | Kumar     | Bangalore, Karnataka | 90000.00 | DM     |
+|      6 | Sreeja    | Ravi      | Kochi, Kerala        | 65000.00 | MD     |
+|      7 | Manoj     | Varma     | Trivandrum, Kerala   | 72000.00 | MS     |
+|      8 | Divya     | Sreekumar | Kochi, Kerala        | 58000.00 | MBBS   |
++--------+-----------+-----------+----------------------+----------+--------+
+8 rows in set (0.00 sec)
+
+mysql> select * from Physician_Speciality;
++--------+---------------------------+
+| Phy_ID | Field_of_specialization   |
++--------+---------------------------+
+|      1 | Cardiology                |
+|      1 | Internal Medicine         |
+|      2 | Pediatrics                |
+|      3 | Cardiology                |
+|      3 | Interventional Cardiology |
+|      4 | General Medicine          |
+|      5 | Neurology                 |
+|      5 | Neurosurgery              |
+|      6 | Dermatology               |
+|      7 | Orthopedics               |
+|      8 | General Medicine          |
++--------+---------------------------+
+11 rows in set (0.00 sec)
+
+mysql> SELECT pat_ID, Ward_num 
+    -> FROM Patient;
++--------+----------+
+| pat_ID | Ward_num |
++--------+----------+
+|   1006 |       10 |
+|   1008 |       20 |
+|   1001 |       30 |
+|   1002 |       30 |
+|   1004 |       30 |
+|   1005 |       30 |
+|   1011 |       30 |
+|   1012 |       30 |
+|   1003 |       40 |
+|   1010 |       40 |
+|   1007 |       50 |
+|   1009 |       60 |
++--------+----------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT 
+    ->     CONCAT(p.pat_fname, ' ', p.pat_Lname) AS patient_name,
+    ->     CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS physician_name
+    -> FROM Patient p
+    -> JOIN Physician ph ON p.phy_id = ph.Phy_ID
+    -> WHERE p.Ward_num IS NOT NULL;
++-----------------+------------------+
+| patient_name    | physician_name   |
++-----------------+------------------+
+| David Joseph    | Rajesh Sreekumar |
+| Devi Prasad     | Rajesh Sreekumar |
+| Ramesh Nair     | Priya Nair       |
+| Suresh Babu     | Suresh Pillai    |
+| Latha Menon     | Suresh Pillai    |
+| Kiran Raj       | Deepa Menon      |
+| Anjali Suresh   | Anil Kumar       |
+| Thomas Mathew   | Sreeja Ravi      |
+| Deepak Rao      | Manoj Varma      |
+| Priya Das       | Priya Nair       |
+| Dinesh Kumar    | Rajesh Sreekumar |
+| Saraswathy Amma | Suresh Pillai    |
++-----------------+------------------+
+12 rows in set (0.00 sec)
+
+mysql> SELECT p.* FROM Patient p JOIN Physician ph ON p.phy_id = ph.Phy_ID WHERE p.pat_fname LIKE 'D%' AND ph.phy_Lname = 'Sreekumar';
++--------+-----------+-----------+------+--------+----------+------------+
+| pat_ID | pat_fname | pat_Lname | Age  | phy_id | Ward_num | admit_date |
++--------+-----------+-----------+------+--------+----------+------------+
+|   1001 | David     | Joseph    |   45 |      1 |       30 | 2024-01-15 |
+|   1002 | Devi      | Prasad    |   62 |      1 |       30 | 2024-01-16 |
+|   1011 | Dinesh    | Kumar     |   65 |      1 |       30 | 2024-01-25 |
++--------+-----------+-----------+------+--------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT p.* FROM Patient p JOIN Physician ph ON p.phy_id = ph.Phy_ID WHERE p.pat_fname LIKE 'D%' AND ph.phy_Lname = 'Sreekumar';-- Step 1: Insert new patientINSERT INTO Patient VALUES(1013, 'Rahul', 'Dev', 40, 2, 20, '2024-01-27');-- Step 2: Display nurse in charge of this patientSELECT n.*FROM Nurse nJOIN Ward w ON n.Nurse_id = w.Nurse_idJOIN Patient p ON w.ward_no = p.Ward_numWHERE p.pat_ID = 1013;
++--------+-----------+-----------+------+--------+----------+------------+
+| pat_ID | pat_fname | pat_Lname | Age  | phy_id | Ward_num | admit_date |
++--------+-----------+-----------+------+--------+----------+------------+
+|   1001 | David     | Joseph    |   45 |      1 |       30 | 2024-01-15 |
+|   1002 | Devi      | Prasad    |   62 |      1 |       30 | 2024-01-16 |
+|   1011 | Dinesh    | Kumar     |   65 |      1 |       30 | 2024-01-25 |
++--------+-----------+-----------+------+--------+----------+------------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO Patient VALUES 
+    -> (1013, 'Rahul', 'Dev', 40, 2, 20, '2024-01-27');
+Query OK, 1 row affected (0.09 sec)
+
+mysql> SELECT n.* FROM Nurse n JOIN Ward w ON n.Nurse_id = w.Nurse_id JOIN Patient p ON w.ward_no = p.Ward_num WHERE p.pat_ID = 1013;
++----------+-------------+-------------+---------+
+| Nurse_id | nurse_fname | nurse_Lname | shift   |
++----------+-------------+-------------+---------+
+|      102 | Beena       | Kumar       | Evening |
++----------+-------------+-------------+---------+
+1 row in set (0.00 sec)
+
+mysql> SELECT *  FROM Physician  WHERE salary > 50000;
++--------+-----------+-----------+----------------------+----------+--------+
+| Phy_ID | Phy_fname | phy_Lname | address              | salary   | Degree |
++--------+-----------+-----------+----------------------+----------+--------+
+|      1 | Rajesh    | Sreekumar | Kochi, Kerala        | 75000.00 | MD     |
+|      2 | Priya     | Nair      | Trivandrum, Kerala   | 60000.00 | MBBS   |
+|      3 | Suresh    | Pillai    | Kochi, Kerala        | 80000.00 | MD     |
+|      4 | Deepa     | Menon     | Calicut, Kerala      | 55000.00 | MBBS   |
+|      5 | Anil      | Kumar     | Bangalore, Karnataka | 90000.00 | DM     |
+|      6 | Sreeja    | Ravi      | Kochi, Kerala        | 65000.00 | MD     |
+|      7 | Manoj     | Varma     | Trivandrum, Kerala   | 72000.00 | MS     |
+|      8 | Divya     | Sreekumar | Kochi, Kerala        | 58000.00 | MBBS   |
++--------+-----------+-----------+----------------------+----------+--------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT Field_of_specialization  FROM Physician_Speciality;
++---------------------------+
+| Field_of_specialization   |
++---------------------------+
+| Cardiology                |
+| Internal Medicine         |
+| Pediatrics                |
+| Interventional Cardiology |
+| General Medicine          |
+| Neurology                 |
+| Neurosurgery              |
+| Dermatology               |
+| Orthopedics               |
++---------------------------+
+9 rows in set (0.01 sec)
+
+mysql> SELECT ph.* FROM Physician ph JOIN Physician_Speciality ps ON ph.Phy_ID = ps.Phy_ID WHERE LENGTH(ps.Field_of_specialization) < 5;
+Empty set (0.00 sec)
+
+mysql> SELECT      CONCAT(Phy_fname, ' ', phy_Lname) AS physician_name,     salary AS monthly_salary FROM Physician;
++------------------+----------------+
+| physician_name   | monthly_salary |
++------------------+----------------+
+| Rajesh Sreekumar |       75000.00 |
+| Priya Nair       |       60000.00 |
+| Suresh Pillai    |       80000.00 |
+| Deepa Menon      |       55000.00 |
+| Anil Kumar       |       90000.00 |
+| Sreeja Ravi      |       65000.00 |
+| Manoj Varma      |       72000.00 |
+| Divya Sreekumar  |       58000.00 |
++------------------+----------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT CONCAT(Phy_fname, ' ', phy_Lname) AS physician_name FROM Physician WHERE LENGTH(Phy_fname) = 5;
++-----------------+
+| physician_name  |
++-----------------+
+| Priya Nair      |
+| Deepa Menon     |
+| Manoj Varma     |
+| Divya Sreekumar |
++-----------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT ward_name  FROM Ward WHERE ward_name NOT LIKE 'P%';
++-----------------+
+| ward_name       |
++-----------------+
+| General Ward A  |
+| General Ward B  |
+| ICU Cardiac     |
+| Neurology Ward  |
+| Orthopedic Ward |
+| Emergency Ward  |
+| Maternity Ward  |
++-----------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT      CONCAT(nurse_fname, ' ', nurse_Lname) AS nurse_name,     shift FROM Nurse;
++------------------+---------+
+| nurse_name       | shift   |
++------------------+---------+
+| Anitha Raju      | Morning |
+| Beena Kumar      | Evening |
+| Celine Thomas    | Night   |
+| Daisy George     | Morning |
+| Elizabeth Mathew | Evening |
+| Fatima Ali       | Night   |
+| Grace Joseph     | Morning |
+| Helen Paul       | Evening |
++------------------+---------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT p.* FROM Patient p JOIN Physician ph ON p.phy_id = ph.Phy_ID JOIN Physician_Speciality ps ON ph.Phy_ID = ps.Phy_ID WHERE p.Age > 60 AND ps.Field_of_specialization = 'Cardiology';
++--------+------------+-----------+------+--------+----------+------------+
+| pat_ID | pat_fname  | pat_Lname | Age  | phy_id | Ward_num | admit_date |
++--------+------------+-----------+------+--------+----------+------------+
+|   1002 | Devi       | Prasad    |   62 |      1 |       30 | 2024-01-16 |
+|   1011 | Dinesh     | Kumar     |   65 |      1 |       30 | 2024-01-25 |
+|   1005 | Latha      | Menon     |   67 |      3 |       30 | 2024-01-19 |
+|   1012 | Saraswathy | Amma      |   70 |      3 |       30 | 2024-01-26 |
++--------+------------+-----------+------+--------+----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT p.* FROM Patient p WHERE p.Age > 60 AND p.phy_id IN (     SELECT Phy_ID      FROM Physician_Speciality      WHERE Field_of_specialization = 'Cardiology' );
++--------+------------+-----------+------+--------+----------+------------+
+| pat_ID | pat_fname  | pat_Lname | Age  | phy_id | Ward_num | admit_date |
++--------+------------+-----------+------+--------+----------+------------+
+|   1002 | Devi       | Prasad    |   62 |      1 |       30 | 2024-01-16 |
+|   1011 | Dinesh     | Kumar     |   65 |      1 |       30 | 2024-01-25 |
+|   1005 | Latha      | Menon     |   67 |      3 |       30 | 2024-01-19 |
+|   1012 | Saraswathy | Amma      |   70 |      3 |       30 | 2024-01-26 |
++--------+------------+-----------+------+--------+----------+------------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT ward_name  FROM Ward WHERE No_of_beds > 25;
++----------------+
+| ward_name      |
++----------------+
+| General Ward A |
+| Emergency Ward |
+| Maternity Ward |
++----------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT      CONCAT(p.pat_fname, ' ', p.pat_Lname) AS patient_name,     CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS physician_name,     w.ward_name FROM Patient p JOIN Physician ph ON p.phy_id = ph.Phy_ID JOIN Ward w ON p.Ward_num = w.ward_no;
++-----------------+------------------+-----------------+
+| patient_name    | physician_name   | ward_name       |
++-----------------+------------------+-----------------+
+| David Joseph    | Rajesh Sreekumar | ICU Cardiac     |
+| Devi Prasad     | Rajesh Sreekumar | ICU Cardiac     |
+| Dinesh Kumar    | Rajesh Sreekumar | ICU Cardiac     |
+| Ramesh Nair     | Priya Nair       | Pediatric Ward  |
+| Priya Das       | Priya Nair       | Pediatric Ward  |
+| Rahul Dev       | Priya Nair       | General Ward B  |
+| Suresh Babu     | Suresh Pillai    | ICU Cardiac     |
+| Latha Menon     | Suresh Pillai    | ICU Cardiac     |
+| Saraswathy Amma | Suresh Pillai    | ICU Cardiac     |
+| Kiran Raj       | Deepa Menon      | General Ward A  |
+| Anjali Suresh   | Anil Kumar       | Neurology Ward  |
+| Thomas Mathew   | Sreeja Ravi      | General Ward B  |
+| Deepak Rao      | Manoj Varma      | Orthopedic Ward |
++-----------------+------------------+-----------------+
+13 rows in set (0.00 sec)
+
+mysql> SELECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;
++------------------+----------------+
+| doctor_name      | total_patients |
++------------------+----------------+
+| Rajesh Sreekumar |              3 |
+| Priya Nair       |              3 |
+| Suresh Pillai    |              3 |
+| Deepa Menon      |              1 |
+| Anil Kumar       |              1 |
+| Sreeja Ravi      |              1 |
+| Manoj Varma      |              1 |
+| Divya Sreekumar  |              0 |
++------------------+----------------+
+8 rows in set (0.00 sec)
+
+mysql> LECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;SELECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;SELECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;SELECT      CON
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'LECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pa' at line 1
++------------------+----------------+
+| doctor_name      | total_patients |
++------------------+----------------+
+| Rajesh Sreekumar |              3 |
+| Priya Nair       |              3 |
+| Suresh Pillai    |              3 |
+| Deepa Menon      |              1 |
+| Anil Kumar       |              1 |
+| Sreeja Ravi      |              1 |
+| Manoj Varma      |              1 |
+| Divya Sreekumar  |              0 |
++------------------+----------------+
+8 rows in set (0.00 sec)
+
++------------------+----------------+
+| doctor_name      | total_patients |
++------------------+----------------+
+| Rajesh Sreekumar |              3 |
+| Priya Nair       |              3 |
+| Suresh Pillai    |              3 |
+| Deepa Menon      |              1 |
+| Anil Kumar       |              1 |
+| Sreeja Ravi      |              1 |
+| Manoj Varma      |              1 |
+| Divya Sreekumar  |              0 |
++------------------+----------------+
+8 rows in set (0.00 sec)
+
+    -> 
+    -> LECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;SELECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;SELECT      CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS total_patients FROM Physician ph LEFT JOIN Patient p ON ph.Phy_ID = p.phy_id GROUP BY ph.Phy_ID, ph.Phy_fname, ph.phy_Lname ORDER BY total_patients DESC;SELECT      CON
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'CONCAT(ph.Phy_fname, ' ', ph.phy_Lname) AS doctor_name,     COUNT(p.pat_ID) AS t' at line 3
++------------------+----------------+
+| doctor_name      | total_patients |
++------------------+----------------+
+| Rajesh Sreekumar |              3 |
+| Priya Nair       |              3 |
+| Suresh Pillai    |              3 |
+| Deepa Menon      |              1 |
+| Anil Kumar       |              1 |
+| Sreeja Ravi      |              1 |
+| Manoj Varma      |              1 |
+| Divya Sreekumar  |              0 |
++------------------+----------------+
+8 rows in set (0.00 sec)
+
++------------------+----------------+
+| doctor_name      | total_patients |
++------------------+----------------+
+| Rajesh Sreekumar |              3 |
+| Priya Nair       |              3 |
+| Suresh Pillai    |              3 |
+| Deepa Menon      |              1 |
+| Anil Kumar       |              1 |
+| Sreeja Ravi      |              1 |
+| Manoj Varma      |              1 |
+| Divya Sreekumar  |              0 |
++------------------+----------------+
+8 rows in set (0.00 sec)
+
+    -> 
+    -> 
