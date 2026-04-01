@@ -1,0 +1,205 @@
+use inventory
+switched to db inventory
+> db.products.insertMany([...])
+uncaught exception: SyntaxError: expected expression, got ']' :
+@(shell):1:27
+> db.products.insertMany([
+... {
+...   "_id": 1,
+...   "name": "xPhone",
+...   "price": 799,
+...   "releaseDate": ISODate("2011-05-14"),
+...   "spec": { "ram": 4, "screen": 6.5, "cpu": 2.66 },
+...   "color": ["white", "black"],
+...   "storage": [64, 128, 256]
+... }
+... ])
+{ "acknowledged" : true, "insertedIds" : [ 1 ] }
+> db.products.insertMany([
+... {
+...   "_id": 2,
+...   "name": "xTablet",
+...   "price": 899,
+...   "releaseDate": ISODate("2011-09-01"),
+...   "spec": { "ram": 16, "screen": 9.5, "cpu": 3.66 },
+...   "color": ["white", "black", "purple"],
+...   "storage": [128, 256, 512]
+... },
+... {
+...   "_id": 3,
+...   "name": "SmartTablet",
+...   "price": 899,
+...   "releaseDate": ISODate("2015-01-14"),
+...   "spec": { "ram": 12, "screen": 9.7, "cpu": 3.66 },
+...   "color": ["blue"],
+...   "storage": [16, 64, 128]
+... },
+... {
+...   "_id": 4,
+...   "name": "SmartPad",
+...   "price": 699,
+...   "releaseDate": ISODate("2020-05-14"),
+...   "spec": { "ram": 8, "screen": 9.7, "cpu": 1.66 },
+...   "color": ["white", "orange", "gold", "gray"],
+...   "storage": [128, 256, 1024]
+... },
+... {
+...   "_id": 5,
+...   "name": "SmartPhone",
+...   "price": 599,
+...   "releaseDate": ISODate("2022-09-14"),
+...   "spec": { "ram": 4, "screen": 9.7, "cpu": 1.66 },
+...   "color": ["white", "orange", "gold", "gray"],
+...   "storage": [128, 256]
+... }
+... ])
+{ "acknowledged" : true, "insertedIds" : [ 2, 3, 4, 5 ] }
+> db.products.find()
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "id" : 1, "name" : "xphone", "price" : 799, "releaseDate" : ISODate("2011-05-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 }, "color " : [ "white", "black" ], "storage" : [ 64, 128, 256 ] }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021de"), "id" : 2, "name" : "xtablet", "price" : 899, "releaseDate" : ISODate("2011-09-01T00:00:00Z"), "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 }, "color " : [ "white", "black", "purple" ], "storage" : [ 128, 256, 512 ] }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "id" : 3, "name" : "smartphone", "price" : 599, "releaseDate" : ISODate("2022-09-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 }, "color " : [ "white", "gold", "grey" ], "storage" : [ 128, 256 ] }
+{ "_id" : 1, "name" : "xPhone", "price" : 799, "releaseDate" : ISODate("2011-05-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 }, "color" : [ "white", "black" ], "storage" : [ 64, 128, 256 ] }
+{ "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate" : ISODate("2011-09-01T00:00:00Z"), "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 }, "color" : [ "white", "black", "purple" ], "storage" : [ 128, 256, 512 ] }
+{ "_id" : 3, "name" : "SmartTablet", "price" : 899, "releaseDate" : ISODate("2015-01-14T00:00:00Z"), "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 }, "color" : [ "blue" ], "storage" : [ 16, 64, 128 ] }
+{ "_id" : 4, "name" : "SmartPad", "price" : 699, "releaseDate" : ISODate("2020-05-14T00:00:00Z"), "spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 }, "color" : [ "white", "orange", "gold", "gray" ], "storage" : [ 128, 256, 1024 ] }
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599, "releaseDate" : ISODate("2022-09-14T00:00:00Z"), "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 }, "color" : [ "white", "orange", "gold", "gray" ], "storage" : [ 128, 256 ] }
+> db.products.find({ _id: 2 })
+{ "_id" : 2, "name" : "xTablet", "price" : 899, "releaseDate" : ISODate("2011-09-01T00:00:00Z"), "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 }, "color" : [ "white", "black", "purple" ], "storage" : [ 128, 256, 512 ] }
+> db.products.findOne()
+{
+	"_id" : ObjectId("682c3a9b5837b8f3ceb021dd"),
+	"id" : 1,
+	"name" : "xphone",
+	"price" : 799,
+	"releaseDate" : ISODate("2011-05-14T00:00:00Z"),
+	"spec" : {
+		"ram" : 4,
+		"screen" : 6.5,
+		"cpu" : 2.66
+	},
+	"color " : [
+		"white",
+		"black"
+	],
+	"storage" : [
+		64,
+		128,
+		256
+	]
+}
+> db.products.find({ _id: 5 }, { name: 1, price: 1 })
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+> 
+> db.products.find({ _id: 5 }, { name: 1, price: 1 })
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+> { "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+uncaught exception: SyntaxError: unexpected token: ':' :
+@(shell):1:8
+> db.products.find({ _id: 5 }).pretty()
+{
+	"_id" : 5,
+	"name" : "SmartPhone",
+	"price" : 599,
+	"releaseDate" : ISODate("2022-09-14T00:00:00Z"),
+	"spec" : {
+		"ram" : 4,
+		"screen" : 9.7,
+		"cpu" : 1.66
+	},
+	"color" : [
+		"white",
+		"orange",
+		"gold",
+		"gray"
+	],
+	"storage" : [
+		128,
+		256
+	]
+}
+> db.products.find({ _id: 5 }, { name: 1, price: 1 })
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+> 
+> db.products.find({ price: { $eq: 899 } }, { name: 1, price: 1 })
+{ "_id" : ObjectId("682c3c655837b8f3ceb021de"), "name" : "xtablet", "price" : 899 }
+{ "_id" : 2, "name" : "xTablet", "price" : 899 }
+{ "_id" : 3, "name" : "SmartTablet", "price" : 899 }
+> db.products.find({ "spec.ram": 4 }, { name: 1, "spec.ram": 1 })
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone", "spec" : { "ram" : 4 } }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "name" : "smartphone", "spec" : { "ram" : 4 } }
+{ "_id" : 1, "name" : "xPhone", "spec" : { "ram" : 4 } }
+{ "_id" : 5, "name" : "SmartPhone", "spec" : { "ram" : 4 } }
+> db.products.find({ color: "black" }, { name: 1, color: 1 })
+{ "_id" : 1, "name" : "xPhone", "color" : [ "white", "black" ] }
+{ "_id" : 2, "name" : "xTablet", "color" : [ "white", "black", "purple" ] }
+> db.products.find(
+...   { releaseDate: ISODate("2020-05-14") },
+...   { name: 1, releaseDate: 1 }
+... )
+{ "_id" : 4, "name" : "SmartPad", "releaseDate" : ISODate("2020-05-14T00:00:00Z") }
+> db.products.find({ price: { $lt: 799 } }, { name: 1, price: 1 })
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "name" : "smartphone", "price" : 599 }
+{ "_id" : 4, "name" : "SmartPad", "price" : 699 }
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+> db.products.find({ "spec.screen": { $lt: 7 } }, { name: 1, "spec.screen": 1 })
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone", "spec" : { "screen" : 6.5 } }
+{ "_id" : 1, "name" : "xPhone", "spec" : { "screen" : 6.5 } }
+> db.products.find({ storage: { $lt: 128 } }, { name: 1, storage: 1 })
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone", "storage" : [ 64, 128, 256 ] }
+{ "_id" : 1, "name" : "xPhone", "storage" : [ 64, 128, 256 ] }
+{ "_id" : 3, "name" : "SmartTablet", "storage" : [ 16, 64, 128 ] }
+> db.products.find({price: {$in: [699, 799]}}, {name: 1,price: 1})
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone", "price" : 799 }
+{ "_id" : 1, "name" : "xPhone", "price" : 799 }
+{ "_id" : 4, "name" : "SmartPad", "price" : 699 }
+> db.products.find({color: {$in: ["black", "white"]}}, { name: 1,color: 1})
+{ "_id" : 1, "name" : "xPhone", "color" : [ "white", "black" ] }
+{ "_id" : 2, "name" : "xTablet", "color" : [ "white", "black", "purple" ] }
+{ "_id" : 4, "name" : "SmartPad", "color" : [ "white", "orange", "gold", "gray" ] }
+{ "_id" : 5, "name" : "SmartPhone", "color" : [ "white", "orange", "gold", "gray" ] }
+> db.products.find({price: {$nin: [699, 799]}}, {name: 1,price: 1})
+{ "_id" : ObjectId("682c3c655837b8f3ceb021de"), "name" : "xtablet", "price" : 899 }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "name" : "smartphone", "price" : 599 }
+{ "_id" : 2, "name" : "xTablet", "price" : 899 }
+{ "_id" : 3, "name" : "SmartTablet", "price" : 899 }
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+> db.products.find({color: {$nin: ["black", "white"]}}, {name: 1,color: 1})
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone" }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021de"), "name" : "xtablet" }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "name" : "smartphone" }
+{ "_id" : 3, "name" : "SmartTablet", "color" : [ "blue" ] }
+> db.products.find({$and: [{price: 899}, {color: {$in: ["white", "black"]}}]},
+... {name: 1,price: 1,color: 1})
+{ "_id" : 2, "name" : "xTablet", "price" : 899, "color" : [ "white", "black", "purple" ] }
+> db.products.find({$or: [{ price: {$lt: 699} },{ price: {$gt: 799} }]}, {name:
+... 1price: 1})
+uncaught exception: SyntaxError: identifier starts immediately after numeric literal :
+@(shell):2:0
+> db.products.find({}, {name: 1,spec: 1}).sort({"spec.ram": 1});
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone", "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 } }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "name" : "smartphone", "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 } }
+{ "_id" : 1, "name" : "xPhone", "spec" : { "ram" : 4, "screen" : 6.5, "cpu" : 2.66 } }
+{ "_id" : 5, "name" : "SmartPhone", "spec" : { "ram" : 4, "screen" : 9.7, "cpu" : 1.66 } }
+{ "_id" : 4, "name" : "SmartPad", "spec" : { "ram" : 8, "screen" : 9.7, "cpu" : 1.66 } }
+{ "_id" : 3, "name" : "SmartTablet", "spec" : { "ram" : 12, "screen" : 9.7, "cpu" : 3.66 } }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021de"), "name" : "xtablet", "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 } }
+{ "_id" : 2, "name" : "xTablet", "spec" : { "ram" : 16, "screen" : 9.5, "cpu" : 3.66 } }
+> db.products.find({releaseDate: {$exists: 1}}, {name: 1,releaseDate:
+... 1}).sort({releaseDate: -1});\
+uncaught exception: SyntaxError: invalid escape sequence :
+@(shell):2:28
+> db.products.find({'price': {$exists: 1}}, { name: 1, price: 1}).sort({price:
+... 1,name: 1});
+{ "_id" : 5, "name" : "SmartPhone", "price" : 599 }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021df"), "name" : "smartphone", "price" : 599 }
+{ "_id" : 4, "name" : "SmartPad", "price" : 699 }
+{ "_id" : 1, "name" : "xPhone", "price" : 799 }
+{ "_id" : ObjectId("682c3a9b5837b8f3ceb021dd"), "name" : "xphone", "price" : 799 }
+{ "_id" : 3, "name" : "SmartTablet", "price" : 899 }
+{ "_id" : 2, "name" : "xTablet", "price" : 899 }
+{ "_id" : ObjectId("682c3c655837b8f3ceb021de"), "name" : "xtablet", "price" : 899 }
+> db.products.find({}, {name: 1,price: 1}).sort({price: -1,name: 1}).limit(1);
+{ "_id" : 3, "name" : "SmartTablet", "price" : 899 }
+> 
+
+

@@ -1,0 +1,73 @@
+use CollegeDB
+switched to db CollegeDB
+> db.createCollection("students")
+{
+	"ok" : 0,
+	"errmsg" : "Collection already exists. NS: CollegeDB.students",
+	"code" : 48,
+	"codeName" : "NamespaceExists"
+}
+> db.students.insertMany([
+... { name: "Arun", age: 22, course: "MCA" },
+... { name: "Meena", age: 23, course: "MSc" },
+... { name: "Rahul", age: 24, course: "MCA" },
+... { name: "Sneha", age: 22, course: "MBA" },
+... { name: "Vijay", age: 23, course: "MCA" },
+... { name: "Anu", age: 21, course: "MSc" },
+... { name: "Riya", age: 22, course: "MBA" },
+... { name: "Kiran", age: 24, course: "MCA" },
+... { name: "Deepa", age: 23, course: "MSc" },
+... { name: "Manu", age: 22, course: "MBA" }
+... ])
+{
+	"acknowledged" : true,
+	"insertedIds" : [
+		ObjectId("69cc9d5dea764d0481d2b5a9"),
+		ObjectId("69cc9d5dea764d0481d2b5aa"),
+		ObjectId("69cc9d5dea764d0481d2b5ab"),
+		ObjectId("69cc9d5dea764d0481d2b5ac"),
+		ObjectId("69cc9d5dea764d0481d2b5ad"),
+		ObjectId("69cc9d5dea764d0481d2b5ae"),
+		ObjectId("69cc9d5dea764d0481d2b5af"),
+		ObjectId("69cc9d5dea764d0481d2b5b0"),
+		ObjectId("69cc9d5dea764d0481d2b5b1"),
+		ObjectId("69cc9d5dea764d0481d2b5b2")
+	]
+}
+> db.students.find().limit(5)
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5a9"), "name" : "Arun", "age" : 22, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5aa"), "name" : "Meena", "age" : 23, "course" : "MSc" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ab"), "name" : "Rahul", "age" : 24, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ac"), "name" : "Sneha", "age" : 22, "course" : "MBA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ad"), "name" : "Vijay", "age" : 23, "course" : "MCA" }
+> db.students.find().skip(3)
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ac"), "name" : "Sneha", "age" : 22, "course" : "MBA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ad"), "name" : "Vijay", "age" : 23, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ae"), "name" : "Anu", "age" : 21, "course" : "MSc" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5af"), "name" : "Riya", "age" : 22, "course" : "MBA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5b0"), "name" : "Kiran", "age" : 24, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5b1"), "name" : "Deepa", "age" : 23, "course" : "MSc" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5b2"), "name" : "Manu", "age" : 22, "course" : "MBA" }
+> db.students.find().sort({ age: 1 })
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ae"), "name" : "Anu", "age" : 21, "course" : "MSc" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5a9"), "name" : "Arun", "age" : 22, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ac"), "name" : "Sneha", "age" : 22, "course" : "MBA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5af"), "name" : "Riya", "age" : 22, "course" : "MBA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5b2"), "name" : "Manu", "age" : 22, "course" : "MBA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5aa"), "name" : "Meena", "age" : 23, "course" : "MSc" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ad"), "name" : "Vijay", "age" : 23, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5b1"), "name" : "Deepa", "age" : 23, "course" : "MSc" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5ab"), "name" : "Rahul", "age" : 24, "course" : "MCA" }
+{ "_id" : ObjectId("69cc9d5dea764d0481d2b5b0"), "name" : "Kiran", "age" : 24, "course" : "MCA" }
+> db.students.updateOne(
+... { name: "Arun" },
+... { $set: { age: 25 } }
+... )
+{ "acknowledged" : true, "matchedCount" : 1, "modifiedCount" : 1 }
+> db.students.deleteOne({ name: "Meena" })
+{ "acknowledged" : true, "deletedCount" : 1 }
+> db.dropDatabase()
+{ "dropped" : "CollegeDB", "ok" : 1 }
+> 
+
+
